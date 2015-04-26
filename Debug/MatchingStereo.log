@@ -1,4 +1,4 @@
-﻿Build started 26/04/2015 20.58.35.
+﻿Build started 26/04/2015 23.54.26.
      1>Project "C:\Users\Antonio\documents\visual studio 2012\Projects\MatchingStereo\MatchingStereo\MatchingStereo.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\opencv\build\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt main.c

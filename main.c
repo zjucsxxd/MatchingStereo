@@ -11,11 +11,11 @@ void SGM1 (IplImage* L, IplImage* R, IplImage * Disparity, int dmin, int dmax, f
 
 int main ()
 {
-	IplImage * L=cvLoadImage("Cones_L.png",1);
-	IplImage * R=cvLoadImage("Cones_R.png",1);
+	IplImage * L=cvLoadImage("Tsukuba_L.png",1);
+	IplImage * R=cvLoadImage("Tsukuba_R.png",1);
 	IplImage * Disparity= cvCreateImage(cvSize(L->width,L->height),8,1);
 	IplImage * Disparity1= cvCreateImage(cvSize(L->width,L->height),8,1);
-	SGM(L,R,Disparity,0,80,3,40);
+	SGM(L,R,Disparity,0,16,3,40);
 	cvShowImage("l", L);
 	cvShowImage("r", R);
 	cvShowImage("d",Disparity);
@@ -100,7 +100,7 @@ void SGM (IplImage* L, IplImage* R, IplImage * Disparity, int dmin, int dmax, fl
 		{			
 			current_global_costs=global_costs(L,R,x,y,dmin,dmax,P1,P2,previous_global_costs);
 			free(previous_global_costs);
-			IMGDATA(Disparity,x,y,0)=best_disparity(current_global_costs,dmax-dmin)*5;
+			IMGDATA(Disparity,x,y,0)=best_disparity(current_global_costs,dmax-dmin)*16;
 			
 			previous_global_costs=current_global_costs;
 		}
