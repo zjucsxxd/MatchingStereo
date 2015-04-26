@@ -1,0 +1,21 @@
+﻿Build started 25/04/2015 19.27.51.
+     1>Project "c:\Users\Antonio\documents\visual studio 2012\Projects\MatchingStereo\MatchingStereo\MatchingStereo.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\opencv\build\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt main.c
+         main.c
+     1>c:\users\antonio\documents\visual studio 2012\projects\matchingstereo\matchingstereo\main.c(62): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\antonio\documents\visual studio 2012\projects\matchingstereo\matchingstereo\main.c(98): warning C4013: 'cost' undefined; assuming extern returning int
+     1>c:\users\antonio\documents\visual studio 2012\projects\matchingstereo\matchingstereo\main.c(121): warning C4013: 'best_disparity' undefined; assuming extern returning int
+     1>c:\users\antonio\documents\visual studio 2012\projects\matchingstereo\matchingstereo\main.c(130): warning C4142: benign redefinition of type
+     1>c:\users\antonio\documents\visual studio 2012\projects\matchingstereo\matchingstereo\main.c(134): warning C4244: 'return' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\antonio\documents\visual studio 2012\projects\matchingstereo\matchingstereo\main.c(140): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\antonio\documents\visual studio 2012\projects\matchingstereo\matchingstereo\main.c(143): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\antonio\documents\visual studio 2012\projects\matchingstereo\matchingstereo\main.c(147): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\users\antonio\documents\visual studio 2012\Projects\MatchingStereo\Debug\MatchingStereo.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\opencv\build\x86\vc11\lib opencv_core249d.lib opencv_imgproc249d.lib opencv_highgui249d.lib opencv_ml249d.lib opencv_video249d.lib opencv_features2d249d.lib opencv_calib3d249d.lib opencv_objdetect249d.lib opencv_contrib249d.lib opencv_legacy249d.lib opencv_flann249d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\users\antonio\documents\visual studio 2012\Projects\MatchingStereo\Debug\MatchingStereo.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\users\antonio\documents\visual studio 2012\Projects\MatchingStereo\Debug\MatchingStereo.lib" /MACHINE:X86 Debug\main.obj
+         MatchingStereo.vcxproj -> c:\users\antonio\documents\visual studio 2012\Projects\MatchingStereo\Debug\MatchingStereo.exe
+     1>Done Building Project "c:\Users\Antonio\documents\visual studio 2012\Projects\MatchingStereo\MatchingStereo\MatchingStereo.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.92
