@@ -14,19 +14,14 @@ void SGM1 (IplImage* L, IplImage* R, IplImage * Disparity, int dmin, int dmax, f
 
 int main ()
 {
-	int a[2];
 	IplImage * L=cvLoadImage("Tsukuba_L.png",1);
 	IplImage * R=cvLoadImage("Tsukuba_R.png",1);
 	IplImage * Disparity= cvCreateImage(cvSize(L->width,L->height),8,1);
-	IplImage * Disparity1= cvCreateImage(cvSize(L->width,L->height),8,1);
 	//SGM(L,R,Disparity,0,15,10,500);
-	SO(L,R,Disparity1,0,15,10,500,16,LEFT_RIGHT);
+	SO(L,R,Disparity,0,15,15,2500,16,UPLEFT_DOWNRIGHT);
 	cvShowImage("l", L);
 	cvShowImage("r", R);
-	cvShowImage("d",Disparity1);
-
-	a[0]=CV_IMWRITE_PNG_COMPRESSION;
-	a[1]=9;
+	cvShowImage("d",Disparity);
 	//cvSaveImage("a.png",&Disparity,a);
 	
 	
@@ -39,8 +34,7 @@ float* global_costs(IplImage *L, IplImage* R, int x, int y, int dmin, int dmax, 
 {
 	int d,i;
 	float best_global_cost,temp_cost;
-	float c; int a; //test
-	float* global_costs=(float*)malloc(sizeof(float)*(dmax-dmin+1));
+	float* global_costs=(float*)malloc(sizeof(float)*(dmax-dmin));
 
 
 
@@ -82,9 +76,7 @@ float* global_costs(IplImage *L, IplImage* R, int x, int y, int dmin, int dmax, 
 				best_global_cost=temp_global_cost;
 			}
 		}
-		a=dmax-dmin;
-		c=best_cost(previous_global_costs,a);
-		global_costs[d]=best_global_cost+cost(L,R,x,y,d)-best_cost(previous_global_costs,a);
+		global_costs[d]=best_global_cost+cost(L,R,x,y,d)-best_cost(previous_global_costs,dmax-dmin);
 		//printf("%d ",cost(L,R,x,y,index));
 		
 	}
@@ -116,12 +108,13 @@ void SGM (IplImage* L, IplImage* R, IplImage * Disparity, int dmin, int dmax, fl
 float cost(IplImage* L, IplImage* R, int x,int y, int d)
 {
 	int x_R=x-d;
+	int y_R=y;
 	if(x_R<0)
 		x_R=0;
 	
-	return abs((CV_IMAGE_ELEM(L,unsigned char,y,x*3)-CV_IMAGE_ELEM(R,unsigned char,y,x_R*3))
-		+(CV_IMAGE_ELEM(L,unsigned char,y,x*3+1)-CV_IMAGE_ELEM(R,unsigned char,y,x_R*3+1))
-		+(CV_IMAGE_ELEM(L,unsigned char,y,x*3+2)-CV_IMAGE_ELEM(R,unsigned char,y,x_R*3+2))
+	return abs((CV_IMAGE_ELEM(L,unsigned char,y,x*3)-CV_IMAGE_ELEM(R,unsigned char,y_R,x_R*3))
+		+(CV_IMAGE_ELEM(L,unsigned char,y,x*3+1)-CV_IMAGE_ELEM(R,unsigned char,y_R,x_R*3+1))
+		+(CV_IMAGE_ELEM(L,unsigned char,y,x*3+2)-CV_IMAGE_ELEM(R,unsigned char,y_R,x_R*3+2))
 		/3
 		);
 }
@@ -160,6 +153,7 @@ float best_cost(float global_costs[], int size)
 }
 
 
+
 void SO(IplImage* L, IplImage* R, IplImage * Disparity, int dmin, int dmax, float P1, float P2,int scale_factor, int type)
 {
 	int test;
@@ -172,9 +166,6 @@ void SO(IplImage* L, IplImage* R, IplImage * Disparity, int dmin, int dmax, floa
 
 	init_xy(&x,&y,&previous_x,&previous_y,width,height, type);
 	
-	printf("%d %d %d %d", x,y,previous_x,previous_y);
-
-
 	while (scan_xy(&x,&y, previous_x, previous_y,width,height,type))
 	{
 		current_global_costs=global_costs(L,R,x,y,dmin,dmax,P1,P2,previous_global_costs);
@@ -192,10 +183,10 @@ void SO(IplImage* L, IplImage* R, IplImage * Disparity, int dmin, int dmax, floa
 
 void init_xy(int*x, int*y, int * previous_x,int* previous_y, int width, int height,int typeSO)
 {
-	if((typeSO==LEFT_RIGHT) || typeSO==UPLEFT_DOWNRIGHT || typeSO==UP_DOWN)
+	if((typeSO==LEFT_RIGHT)  || typeSO==UP_DOWN)
 	{
 		*previous_x=-1;
-		*previous_y=0;
+		*previous_y=-1;
 		*x=0;
 		*y=0;
 	}
@@ -204,18 +195,36 @@ void init_xy(int*x, int*y, int * previous_x,int* previous_y, int width, int heig
 	{
 		*x=width-1;
 		*y=0;
+		*previous_x=width;
+		*previous_y=-1;
 	}
 
-	if(typeSO==DOWNRIGHT_UPLEFT || typeSO==DOWN_UP)
+	if(typeSO==DOWNRIGHT_UPLEFT)
 	{
 		*x=width-1;
 		*y=height-1;
+		*previous_x=height;
+		*previous_y=width;
 	}
 
-	if(typeSO==DOWNLEFT_UPRIGHT)
+	if(typeSO==DOWN_UP || typeSO==UPLEFT_DOWNRIGHT)
 	{
 		*x=0;
 		*y=height - 1;
+		*previous_x=-1;
+		*previous_y=height;
+	}
+	if(typeSO==UPLEFT_DOWNRIGHT)
+	{
+		*previous_x=1;
+	}
+
+	if(typeSO=DOWNRIGHT_UPLEFT)
+	{
+		*x=width-1;
+		*y=0;
+		*previous_y=1;
+		*previous_x=width;
 	}
 }
 
@@ -236,4 +245,161 @@ int scan_xy(int* x,int* y,int previous_x,int  previous_y, int width,int height, 
 			return 1;
 	}
 
+	if(typeSO==RIGHT_LEFT)
+	{
+		if(previous_x<=0)
+		{
+			*y=previous_y+1;
+			*x=width-1;
+		}
+		else
+			*x=previous_x-1;
+		if(*y>=height && *x<=0)
+			return 0;
+		else
+			return 1;
+	}
+
+	if(typeSO==UP_DOWN)
+	{
+		if(previous_y>=height)
+		{
+			*x=previous_x+1;
+			*y=0;
+		}
+		else
+			*y=previous_y+1;
+		if(*x>=width && *y>=height)
+			return 0;
+		else
+			return 1;
+	}
+
+	if(typeSO==DOWN_UP)
+	{
+		if(previous_y<=0)
+		{
+			*x=previous_x+1;
+			*y=height-1;
+		}
+		else
+			*y=previous_y-1;
+		if(*x>=width && *y<=0)
+			return 0;
+		else
+			return 1;
+	}
+
+	if(typeSO==UPLEFT_DOWNRIGHT)
+	{
+		if(*x<*y)
+		{
+			if(previous_y>=height-1)
+			{
+				*x=0;
+				*y=previous_y-previous_x-1;
+			}
+			else
+			{
+				*x=previous_x+1;
+				*y=previous_y+1;
+			}
+		}
+		else
+		if(*x==*y)
+		{
+			if(previous_y>=height-1)
+			{
+				*x=1;
+				*y=0;
+			}
+			else
+			{
+				*x=previous_x+1;
+				*y=previous_y+1;
+			}
+		}
+		else
+			if(*x>*y)
+			{
+				if(previous_x<width-1)
+				{
+					if(previous_y>=height-1)
+					{
+						*x=previous_x-previous_y+1;
+						*y=0;
+					}
+					else
+					{
+						*x=previous_x+1;
+						*y=previous_y+1;
+					}
+				}
+				else
+				{
+					*x=previous_x-previous_y+1;
+					*y=0;
+				}
+
+			}
+
+		if(previous_x>=(width)-1 && previous_y<=0)
+			return 0;
+		else
+			return 1;
+	}
+
+	if(typeSO==DOWNRIGHT_UPLEFT)
+	{
+		if(*x>=*y)
+		{
+			if(previous_y<=0)
+			{
+				if(previous_x>width-height)
+				{
+					*x=width-1;
+					*y=width-previous_x;
+				}
+				else
+				{
+					*x=previous_x+(width-height);
+					*y=height-1;
+				}
+
+			}
+			else
+			{
+				*x=previous_x-1;
+				*y=previous_y-1;
+			}
+		}
+		else
+		{
+			if(previous_x<=0)
+			{
+				*x=width-height+1-previous_y;
+				*y=width-1;
+			}
+			else
+			{
+				*x=previous_x-1;
+				*y=previous_y-1;
+			}
+		}
+
+		
+
+
+		
+		if(previous_y>=(height)-1 && previous_x<=0)
+			return 0;
+		else
+			return 1;
+			
+
+
+
+
+
+	}
 }
