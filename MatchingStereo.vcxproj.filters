@@ -18,9 +18,15 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SO.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="typeSO.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SO.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

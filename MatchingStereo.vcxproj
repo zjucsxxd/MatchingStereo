@@ -80,8 +80,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
+    <ClCompile Include="SO.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SO.h" />
     <ClInclude Include="typeSO.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

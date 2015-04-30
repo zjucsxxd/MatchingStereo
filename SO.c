@@ -1,27 +1,7 @@
+
 #include "SO.h"
 
-#define IMGDATA(image,i,j,k) *((uchar *)&image->imageData[(i)*(image->widthStep) + (j)*(image->nChannels) + (k)])  //macro for data manipulation of image
 
-
-
-int main ()
-{
-	IplImage * L=cvLoadImage("Venus_L.png",1);
-	IplImage * R=cvLoadImage("Venus_R.png",1);
-	IplImage * Disparity= cvCreateImage(cvSize(L->width,L->height),8,1);
-	//SGM(L,R,Disparity,0,15,10,500);
-	SO(L,R,Disparity,0,19,15,1000,8,UPRIGHT_DOWNLEFT);
-	cvShowImage("l", L);
-	cvShowImage("r", R);
-	cvShowImage("d",Disparity);
-	//cvSaveImage("a.png",&Disparity,a);
-	
-	
-	
-	cvWaitKey(0);
-	
-}
-/*
 float* global_costs(IplImage *L, IplImage* R, int x, int y, int dmin, int dmax, float P1, float P2, float* previous_global_costs)
 {
 	int d,i;
@@ -76,26 +56,6 @@ float* global_costs(IplImage *L, IplImage* R, int x, int y, int dmin, int dmax, 
 }
 
 
-void SGM (IplImage* L, IplImage* R, IplImage * Disparity, int dmin, int dmax, float P1, float P2)
-{
-	int x,y,d;
-	float* previous_global_costs;
-	float* current_global_costs;//=(float*)malloc(sizeof(float)*(dmax-dmin+1));;
-	
-	for(x=0; x<L->height;x++)
-	{
-		previous_global_costs=(float*)calloc(sizeof(float),(dmax-dmin+1));
-		for(y=0; y<L->width;y++)
-		{			
-			current_global_costs=global_costs(L,R,x,y,dmin,dmax,P1,P2,previous_global_costs);
-			free(previous_global_costs);
-			IMGDATA(Disparity,x,y,0)=best_disparity(current_global_costs,dmax-dmin)*16;
-			
-			previous_global_costs=current_global_costs;
-		}
-	}
-	
-}
 
 float cost(IplImage* L, IplImage* R, int x,int y, int d)
 {
@@ -246,7 +206,6 @@ int scan_xy(int* x,int* y,int previous_x,int  previous_y, int width,int height, 
 			*y=previous_y+1;
 			*x=0;
 			memset(previous_global_costs,0,size);
-			//previous_global_costs=(float*)calloc(sizeof(float),size);
 		}
 		else
 			*x=previous_x+1;
@@ -500,4 +459,4 @@ int scan_xy(int* x,int* y,int previous_x,int  previous_y, int width,int height, 
 		else
 			return 1;
 	}
-}*/
+}
